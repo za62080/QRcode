@@ -12,7 +12,7 @@
 <link rel="manifest" href="../manifest.webmanifest"><link rel="icon" href="../icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="QR Secure"></head>
 <body>
 <main class="app">
-  <header><h1>QR Secure</h1><p>① QRを読む → ② パスワードを決める → ③ 暗号化してメール共有</p><p>QRを読み取り、保存・メール・SMS・共有できます。</p></header>
+  <header><h1>QR Secure</h1><p>① QRを読む → ② パスワードを決める → ③ 暗号化ファイルを保存／共有</p><p>送信データは「識別番号・QRコードデータ・読取日時」の3項目だけです。</p></header>
 
   <section class="status-grid" aria-label="動作状態">
     <div><span>ブラウザ</span><strong id="browserStatus">確認中…</strong></div>
@@ -33,46 +33,35 @@
   </section>
 
   <section class="panel">
-    <h2>送信設定</h2>
-    <p class="hint">設定はこの端末のブラウザ内だけに保存されます。</p>
-    <div class="form-grid">
-      <label>社員名<input id="employeeName" type="text" maxlength="80" autocomplete="name" placeholder="例：山田 太郎"></label>
-      <label>端末名<input id="deviceName" type="text" maxlength="80" placeholder="例：倉庫iPhone-01"></label>
-      <label>送信先メールアドレス<input id="emailTo" type="email" inputmode="email" autocomplete="email" placeholder="example@example.com"></label>
-      <label>SMS送信先電話番号<input id="smsTo" type="tel" inputmode="tel" autocomplete="tel" placeholder="09012345678"></label>
-      <label class="wide">メール件名<input id="mailSubject" type="text" maxlength="120" placeholder="QRコード読取データ"></label>
-    </div>
-    <div class="actions"><button id="saveSettingsBtn">送信設定を保存</button></div>
-  </section>
-
-  <section class="panel">
-    <h2>収集データを送信</h2>
-    <p class="hint">ボタンを押すと宛先・件名・本文を入力した状態で端末の送信画面を開きます。最終的な送信操作は端末側で行います。</p>
-    <div class="send-grid">
-      <button id="mailBtn" class="primary" disabled>メール送信</button>
-      <button id="smsBtn" disabled>SMS送信</button>
-      <button id="shareBtn" disabled>CSV添付で共有</button>
-    </div>
+    <h2>読み取り設定</h2>
+    <div class="card" id="reviewPanel">
+<h3>読み取り結果の確認</h3>
+<p id="pendingStatus" aria-live="polite">次のQRコードを待っています</p>
+<div class="actions"><button id="acceptBtn" class="primary" disabled>このQRを保存する</button><button id="rejectBtn" disabled>保存しない</button></div>
+</div>
+<label class="checkline"><input id="confirmBeforeSave" type="checkbox" checked> 保存前に読み取り結果を確認する（OFFで自動保存）</label>
+<label class="checkline"><input id="allowDuplicates" type="checkbox"> 同じQRコードの複数回読み取りを許可する</label>
+    <p class="hint">OFF（標準）：履歴クリアまで同じQRは1回だけ保存します。ON：同じQRでも再度読み取るたび、新しい識別番号・読取日時で保存します。</p>
   </section>
 
   <section class="panel">
     <div class="section-head"><h2>読み取り履歴</h2><button id="clearBtn" class="danger" disabled>全削除</button></div>
-    <div class="table-wrap"><table><thead><tr><th>No.</th><th>日時</th><th>データ</th><th></th></tr></thead><tbody id="historyBody"><tr class="empty"><td colspan="4">まだデータがありません</td></tr></tbody></table></div>
-    <div class="actions export"><button id="csvBtn" disabled>CSV出力</button><button id="txtBtn" disabled>TXT出力</button></div>
+    <div class="table-wrap"><table><thead><tr><th>識別番号</th><th>QRコードデータ</th><th>読取日時</th><th></th></tr></thead><tbody id="historyBody"><tr class="empty"><td colspan="4">まだデータがありません</td></tr></tbody></table></div>
+    <div class="actions export"><button id="csvBtn" disabled>CSV出力</button></div>
   </section>
 
   <section class="panel secure-panel">
     <h2>② 暗号化して送信</h2>
-    <p class="hint">CSVデータをAES-256-GCMで暗号化し、.qrencファイルとして共有します。パスワードは保存・送信しません。</p>
+    <p class="hint">「識別番号・QRコードデータ・読取日時」のCSVデータをAES-256-GCMで暗号化し、.qrencファイルにします。パスワードは保存・送信しません。</p>
     <div class="form-grid">
       <label>暗号化パスワード<input id="encPassword" type="password" autocomplete="new-password" minlength="10" placeholder="10文字以上を推奨"></label>
       <label>パスワード確認<input id="encPassword2" type="password" autocomplete="new-password" minlength="10" placeholder="もう一度入力"></label>
     </div>
     <div class="actions">
-      <button id="encryptShareBtn" class="primary" disabled>暗号化してメール共有</button>
-      <button id="encryptSaveBtn" disabled>暗号化ファイル保存</button>
+      <button id="encryptSaveBtn" class="primary" disabled>① 暗号化ファイルを保存</button>
+      <button id="encryptShareBtn" disabled>② 暗号化ファイルを共有</button>
     </div>
-    <p class="hint">受信者にはパスワードをメール本文とは別の経路で伝えてください。</p>
+    <p class="hint"><strong>Yahoo!メール推奨手順：</strong>まず「① 暗号化ファイルを保存」で .qrenc をダウンロードし、Yahoo!メールの新規メール画面から「添付」→保存した .qrenc を選択→宛先を指定→送信してください。「②共有」は端末・メールアプリがファイル共有に対応する場合だけ使用します。</p><p class="hint">受信者にはパスワードをメール本文とは別の経路で伝えてください。</p>
     <p class="hint">メール本文に復号ページURLを自動挿入します：<br><code id="receiverUrl"></code></p>
   </section>
 

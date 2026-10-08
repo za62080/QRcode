@@ -19,3 +19,8 @@ input:focus,textarea:focus,button:focus-visible{outline:3px solid rgba(17,24,39,
 .drop-zone.over{border-style:solid}.app{max-width:900px}.panel{overflow-wrap:anywhere}
 code{font-size:.9em}
 @media(min-width:800px){textarea{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.panel{padding:24px}}
+
+.camera-toggle{width:100%;padding:15px;font-weight:700;border:2px solid #111!important}
+.camera-on{background:#111!important;color:white!important}
+.camera-off{background:white!important;color:#111!important}
+.reader.is-frozen{filter:brightness(.75)}

@@ -14,6 +14,7 @@
 <main class="app">
   <header><h1>QR Secure</h1><p>① QRを読む → ② パスワードを決める → ③ 暗号化ファイルを保存／共有</p><p>送信データは「識別番号・QRコードデータ・読取日時」の3項目だけです。</p></header>
 
+  <section class="panel"><h2>利用ユーザーと停止時間</h2><label>利用ユーザー<select id="userProfile"><option value="guest">ゲスト</option></select></label><div class="actions"><input id="profileName" maxlength="30" placeholder="登録するユーザー名（最大10人）"><button id="addProfile" type="button">ユーザー登録</button><button id="deleteProfile" type="button">選択ユーザー削除</button></div><label>QR読取後の停止時間（秒）<input id="pauseSeconds" type="number" min="0.3" max="60" step="0.1" value="1.8" inputmode="decimal"></label><p class="hint">起動時はゲスト。登録ユーザーごとに前回の停止時間を保存します。ゲストは毎回1.8秒です。</p></section>
   <section class="status-grid" aria-label="動作状態">
     <div><span>ブラウザ</span><strong id="browserStatus">確認中…</strong></div>
     <div><span>カメラ権限</span><strong id="permissionStatus">未確認</strong></div>
@@ -22,26 +23,21 @@
   <p id="notice" class="notice" role="status" aria-live="polite"></p>
 
   <section class="panel">
-    <div id="reader" class="reader"></div>
-    <div class="actions"><button id="startBtn" class="primary">カメラを起動</button><button id="stopBtn" disabled>停止</button></div>
+    <div class="actions"><button id="cameraBtn" class="camera-toggle camera-off">カメラ起動</button></div><div id="reader" class="reader"></div>
   </section>
 
   <section class="panel">
     <h2>最新の読み取り結果</h2>
     <textarea id="latestResult" rows="3" readonly placeholder="QRコードを読み取るとここに表示されます"></textarea>
-    <button id="copyBtn" disabled>結果をコピー</button>
+    <div class="actions"><button id="acceptBtn" class="primary" disabled>保存</button><button id="copyBtn" disabled>結果をコピー</button></div><p id="pendingStatus" aria-live="polite">次のQRコードを待っています</p>
   </section>
 
   <section class="panel">
     <h2>読み取り設定</h2>
-    <div class="card" id="reviewPanel">
-<h3>読み取り結果の確認</h3>
-<p id="pendingStatus" aria-live="polite">次のQRコードを待っています</p>
-<div class="actions"><button id="acceptBtn" class="primary" disabled>このQRを保存する</button><button id="rejectBtn" disabled>保存しない</button></div>
-</div>
-<label class="checkline"><input id="confirmBeforeSave" type="checkbox" checked> 保存前に読み取り結果を確認する（OFFで自動保存）</label>
-<label class="checkline"><input id="allowDuplicates" type="checkbox"> 同じQRコードの複数回読み取りを許可する</label>
-    <p class="hint">OFF（標準）：履歴クリアまで同じQRは1回だけ保存します。ON：同じQRでも再度読み取るたび、新しい識別番号・読取日時で保存します。</p>
+    
+<label class="checkline"><input id="continuousRegistration" type="checkbox"> 連続登録可（保存操作を省略）</label>
+<label class="checkline"><input id="allowDuplicates" type="checkbox"> 同一QRコード登録可</label>
+    <p class="hint">OFF（標準）：同じQRは履歴クリアまで1回だけ保存。ON：同じQRを再度保存できます。読み取り後、設定した秒数以内に「保存」を押してください。</p>
   </section>
 
   <section class="panel">

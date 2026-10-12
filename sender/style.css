@@ -24,3 +24,10 @@ code{font-size:.9em}
 .camera-on{background:#111!important;color:white!important}
 .camera-off{background:white!important;color:#111!important}
 .reader.is-frozen{filter:brightness(.75)}
+
+/* v6 camera-release: カメラを少し狭くし、右側に更新停止解除ボタン */
+.camera-layout{display:flex;align-items:flex-start;gap:6px;margin-top:12px}
+.camera-layout .reader{flex:1 1 auto;width:0;min-width:0}
+#releaseFreezeBtn{flex:0 0 42px;width:42px;min-height:190px;writing-mode:vertical-rl;text-orientation:upright;white-space:nowrap;line-height:1.15;padding:10px 6px;background:#fff;color:#111;border:2px solid #111}
+#releaseFreezeBtn:not(:disabled){background:#fff;cursor:pointer}
+@media(max-width:420px){.camera-layout{gap:5px}#releaseFreezeBtn{flex-basis:38px;width:38px;min-height:175px;padding:8px 4px;font-size:13px}}

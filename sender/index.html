@@ -14,7 +14,7 @@
 <main class="app">
   <header><h1>QR Secure</h1><p>① QRを読む → ② パスワードを決める → ③ 暗号化ファイルを保存／共有</p><p>送信データは「識別番号・QRコードデータ・読取日時」の3項目だけです。</p></header>
 
-  <section class="panel"><h2>利用ユーザーと停止時間</h2><label>利用ユーザー<select id="userProfile"><option value="guest">ゲスト</option></select></label><div class="actions"><input id="profileName" maxlength="30" placeholder="登録するユーザー名（最大10人）"><button id="addProfile" type="button">ユーザー登録</button><button id="deleteProfile" type="button">選択ユーザー削除</button></div><label>QR読取後の停止時間（秒）<input id="pauseSeconds" type="number" min="0.3" max="60" step="0.1" value="1.8" inputmode="decimal"></label><p class="hint">起動時はゲスト。登録ユーザーごとに前回の停止時間を保存します。ゲストは毎回1.8秒です。</p></section>
+  <section class="panel"><h2>利用ユーザーと停止時間</h2><label>利用ユーザー<select id="userProfile"><option value="guest">ゲスト</option></select></label><label>QR読取後の停止時間（秒）<input id="pauseSeconds" type="number" min="0.3" max="60" step="0.1" value="1.8" inputmode="decimal"></label><p class="hint">起動時はゲスト。既存の登録ユーザーごとに前回の停止時間を保存します。ユーザー登録・削除機能はありません。ゲストは毎回1.8秒です。</p></section>
   <section class="status-grid" aria-label="動作状態">
     <div><span>ブラウザ</span><strong id="browserStatus">確認中…</strong></div>
     <div><span>カメラ権限</span><strong id="permissionStatus">未確認</strong></div>
@@ -23,7 +23,7 @@
   <p id="notice" class="notice" role="status" aria-live="polite"></p>
 
   <section class="panel">
-    <div class="actions"><button id="cameraBtn" class="camera-toggle camera-off">カメラ起動</button></div><div id="reader" class="reader"></div>
+    <div class="actions"><button id="cameraBtn" class="camera-toggle camera-off">カメラ起動</button></div><div class="camera-layout"><div id="reader" class="reader"></div><button id="releaseFreezeBtn" type="button" disabled>更新停止解除</button></div>
   </section>
 
   <section class="panel">

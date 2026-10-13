@@ -1,6 +1,6 @@
 {
-  "name": "QR Secure System",
-  "short_name": "QR Secure",
+  "name": "QRコード読み取り",
+  "short_name": "QRコード読み取り",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
